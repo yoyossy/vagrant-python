@@ -2,7 +2,3 @@
 	path = modules/subversion
 	url = https://github.com/mattbowen/puppet-subversion.git
 
-[submodule "modules/augeas"]
-	path = modules/augeas
-	url = https://github.com/camptocamp/puppet-augeas.git
-
