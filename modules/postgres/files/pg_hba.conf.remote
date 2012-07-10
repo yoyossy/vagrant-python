@@ -1,0 +1,11 @@
+# File managed by Puppet
+# Do not change!
+
+# Database login by UNIX sockets with user name authentication
+# TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+local   all         postgres                          ident sameuser
+
+# Database login by clients -- user and ip must be passed by file
+# TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+host    all         @clientuser @clientip             md5
+

@@ -3,6 +3,7 @@ stage { "update": before => Stage["pre"] }
 stage { "pre": before => Stage["main"] }
 
 class aptupdate {
+      group { "puppet": ensure => "present"; }
       exec { "/usr/bin/apt-get update":}
 }
 
@@ -12,11 +13,15 @@ class python {
         "python": ensure => "2.6.5-0ubuntu1";
         "python-dev": ensure => "2.6.5-0ubuntu1";
         "python-setuptools": ensure => installed;
-	"libreadline5-dev": ensure => present;
-	"libssl-dev": ensure => present;
-	"python-openssl": ensure => present;
-	"sqlite3": ensure => present;
-	"libsqlite3-dev": ensure => present;
+       "libreadline5-dev": ensure => present;
+	  "libssl-dev": ensure => present;
+	  "python-openssl": ensure => installed;
+	  "sqlite3": ensure => present;
+        "postgresql": ensure => present;
+        "libpq-dev": ensure => present;
+          "pgadmin3": ensure => present;
+
+	   "libsqlite3-dev": ensure => present;
     }
     exec { "easy_install pip":
         path => "/usr/local/bin:/usr/bin:/bin",
@@ -35,11 +40,42 @@ class pildeps {
   "liblcms1-dev": ensure => present;
   }
 }
-
+class python-openerp {
+  package { 
+  "python-lxml": ensure => installed;
+  "python-mako": ensure => installed;
+  "python-dateutil": ensure => installed;
+  "python-psycopg2": ensure => installed;
+  "python-pychart": ensure => installed;
+  "python-pydot": ensure => installed;
+  "python-tz": ensure => installed;
+  "python-reportlab": ensure => installed;
+  "python-yaml": ensure => installed;
+  "python-vobject": ensure => installed;
+  "python-gtk2": ensure => installed; 
+  "python-glade2": ensure => installed; 
+       "python-matplotlib": ensure => installed; 
+     "python-egenix-mxdatetime": ensure => installed; 
+  "python-pybabel": ensure => installed;
+   "python-pyparsing": ensure => installed;
+   "python-cherrypy": ensure => installed;
+    "python-formencode": ensure => installed;
+    "python-simplejson": ensure => installed;
+    "python-feedparser": ensure => installed;
+    "python-gdata": ensure => installed;
+    "python-ldap": ensure => installed;
+    "python-libxslt1": ensure => installed;
+     "python-openid": ensure => installed;
+      "python-vatnumber": ensure => installed;
+     "python-webdav": ensure => installed;
+      "python-werkzeug": ensure => installed;
+        "python-xlwt": ensure => installed;
+          "python-zsi": ensure => installed;      
+  
+     }
+}
 class vcs {
-
-  package { "git-core":
-    ensure => present,
+  package { "git-core":    ensure => present,
   }
 
 }
@@ -65,8 +101,17 @@ class buildpythons {
       require => [Class["checkoutbuildout"],Class["python"],Class["pildeps"]],
       creates => "/opt/python/bin/buildout",
       logoutput => on_failure,
-      
   }
+  exec { "/usr/bin/python2.6 /vagrant/kalymero-OpenERP-Buildout-56b09d7/bootstrap.py --distribute  && /vagrant/kalymero-OpenERP-Buildout-56b09d7/bin/buildout -c buildout.cfg":
+      user => "root",
+      path => "/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin",
+      timeout => 7200,
+      require => [Class["python"],Class["pildeps"]],
+      creates => "/vagrant/kalymero-OpenERP-Buildout-56b09d7/bin/buildout",
+      logoutput => on_failure,
+  }
+
+
 
 }
 class { "aptupdate": stage => "update"}
@@ -79,8 +124,8 @@ class lucid32 {
   include python
   include pildeps
   include vcs
-  include buildpythons
-  
+#  include buildpythons
+  include python-openerp 
 
 }
 
