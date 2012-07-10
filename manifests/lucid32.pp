@@ -102,14 +102,14 @@ class buildpythons {
       creates => "/opt/python/bin/buildout",
       logoutput => on_failure,
   }
-  exec { "/usr/bin/python2.6 /vagrant/kalymero-OpenERP-Buildout-56b09d7/bootstrap.py --distribute  && /vagrant/kalymero-OpenERP-Buildout-56b09d7/bin/buildout -c buildout.cfg":
-      user => "root",
-      path => "/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin",
-      timeout => 7200,
-      require => [Class["python"],Class["pildeps"]],
-      creates => "/vagrant/kalymero-OpenERP-Buildout-56b09d7/bin/buildout",
-      logoutput => on_failure,
-  }
+#  exec { "/usr/bin/python2.6 /vagrant/kalymero-OpenERP-Buildout-56b09d7/bootstrap.py --distribute  && /vagrant/kalymero-OpenERP-Buildout-56b09d7/bin/buildout -c buildout.cfg":
+#      user => "root",
+#      path => "/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin",
+#      timeout => 7200,
+#      require => [Class["python"],Class["pildeps"]],
+#      creates => "/vagrant/kalymero-OpenERP-Buildout-56b09d7/bin/buildout",
+#      logoutput => on_failure,
+#  }
 
 
 
@@ -124,7 +124,7 @@ class lucid32 {
   include python
   include pildeps
   include vcs
-#  include buildpythons
+  include buildpythons
   include python-openerp 
 
 }
